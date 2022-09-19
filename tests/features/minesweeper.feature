@@ -1,5 +1,16 @@
 Feature: Minesweeper
 
+Cell without bomb -> o
+Cell with bomb -> x
+
+Cell with one adjacent bomb = 1
+Cell with two adjacent bomb = 2
+Cell with three adjacent bomb = 3
+Cell with four adjacent bomb = 4
+Cell with five adjacent bomb = 5
+Cell with six adjacent bomb = 6
+Cell with seven adjacent bomb = 7
+Cell with eight adjacent bomb = 8
 #Define status
 
 Background: 
@@ -23,9 +34,13 @@ When the user clicks on "<Reset-Btn>"
 Then "<minesLeft>" should show the following value: "10" 
 # This will give problem when difficulty is switched
 And "<timeDisplay>" should show the following value: ""
-# Map sizing? depends on difficulty
 # And cells are all covered up
 # Don't know how to explain those scenarios yet.
+
+Scenario: Game over when the user reveals mine
+When the user clicks on cell [1,1]
+And cell [1,1] should be a bomb
+Then game is over
 
 Scenario Outline: Flagging cell
 When the user right clicks on "<Cell>"
@@ -47,28 +62,9 @@ And mines left display should add one mine
 Examples:
     | minesLeft | cellStatus | minesLeft |
     |     9     |     "?"    |     10    |
-
-Scenario: Game over when the user reveals mine
-When the user clicks on "<Cell-With-Mine>"
-Then game is over  
-
-# Scenario: Game over when the user reveals mine
-# When the user clicks on "<Cell>"
-# And "<Cell>" is "<Cell-With-Mine>"
-# Then game is over 
-
+ 
 Scenario: User game over
 When game is over
-Then "<Cell>" are disabled
-Then "<timeDisplay>" is stopped
-Then smiley should be "<Sad-Smiley>"
-
-Scenario Outline: Set difficulty
-When the user clicks on "<difficulty>"
-Then new "<mines>", "<rows>" and "<columns>" are generated
-
-Examples:
-    |   difficulty   | mines | rows | columns |
-    | "Introduction" |  10   |  8   |    8    |
-    | "Intermediate" |  40   |  16  |    16   |
-    |    "Expert"    |  99   |  16  |    30   |
+Then cells are disabled
+Then timeDisplay is stopped
+# Then smiley should be "<Sad-Smiley>"
