@@ -1,3 +1,16 @@
+#wrapped{
+    position: relative;
+    top: 100px;
+}
+#data-board{
+    width: 400px;
+    height: 100px;
+    border: 1px solid gray;
+    background-color: darkgray;
+    
+    margin: 0 auto;
+}
+
 #board{
     width: 400px;
     height: 400px;
