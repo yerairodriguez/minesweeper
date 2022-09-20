@@ -4,6 +4,7 @@ Feature: Minesweeper
 
 Cell without bomb -> o
 Cell with bomb -> x
+Cell revealed -> $
 
 Cell with one adjacent bomb = 1
 Cell with two adjacent bomb = 2
@@ -44,10 +45,32 @@ And "<timeDisplay>" should show the following value: ""
 # And cells are all covered up
 # Don't know how to explain those scenarios yet.
 
-Scenario: Game over when the user reveals mine
-When the user clicks on cell [1,1]
-And cell [1,1] should be a bomb
-Then game is over
+Scenario Outline: Game over when the user reveals mine
+Given the user loads the following data: "<MockData>"
+When the user reveals cell [2,1]
+And cell [2,1] should have bomb
+Then gameStatus should be over
+
+Examples:
+    |   MockData  | gameStatus |
+    | OOO-XOO-OOO |    over    |
+    
+Scenario: User game over
+When game is over
+Then cells are disabled
+Then timeDisplay is stopped
+# Then smiley should be "<Sad-Smiley>"
+
+Scenario: User reveals cell without bomb
+Given the user loads the following data: "<MockData>"
+When the user reveals cell [2,1]
+And cell [2,1] shouldn't have bomb
+Then gameStatus should alive
+
+Examples:
+    |   MockData  | gameStatus |
+    | OOO-OOO-OXO |    alive   |
+
 
 Scenario Outline: Flagging cell
 When the user right clicks on "<Cell>"
@@ -69,9 +92,19 @@ And mines left display should add one mine
 Examples:
     | minesLeft | cellStatus | minesLeft |
     |     9     |     "?"    |     10    |
- 
-Scenario: User game over
-When game is over
-Then cells are disabled
-Then timeDisplay is stopped
-# Then smiley should be "<Sad-Smiley>"
+
+Scenario Outline: Number of mines with adjacent mines
+Given the user loads the following data: "<MockData>"
+When the user reveals cell [2-2]
+Then the cell [2-2] should show the following value: "<NumberOfMines>"
+
+Examples:
+    |   MockData  | NumberOfMines |
+    | OOO-X$O-OOO |       1       |
+    | OOO-X$X-OOO |       2       |
+    | OOX-X$X-OOO |       3       |
+    | OOX-X$X-XOO |       4       |
+    | OXX-X$X-XOO |       5       |
+    | OXX-X$X-XXO |       6       |
+    | XXX-X$X-XXO |       7       |
+    | XXX-X$X-XXX |       8       |
