@@ -1,6 +1,6 @@
 Feature: Minesweeper
 
-Cell [1-1] means row = 1, column = 1
+'Cell [1-1] means row = 1, column = 1
 
 Cell without bomb -> o
 Cell with bomb -> x
@@ -17,8 +17,8 @@ Cell with eight adjacent bomb = 8
 Cell flagged with bomb = !
 Cell suspected with bomb = ?
 
-# 3x3 Example with cell with bomb in the [2-2]
-Each dash means one row below it = ooo-ooo-oox
+3x3 Example with cell with bomb in the [2-2]
+Each dash means one row below it = ooo-ooo-oox'
 
 Background: 
 Given the user opens the app
