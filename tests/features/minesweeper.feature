@@ -61,6 +61,10 @@ Then cells are disabled
 Then timeDisplay is stopped
 # Then smiley should be "<Sad-Smiley>"
 
+Scenario: Reveal mines when game is over
+When game is over
+Then all cells with mines should be revealed
+
 Scenario: User reveals cell without bomb
 Given the user loads the following data: "<MockData>"
 When the user reveals cell [2,1]
