@@ -15,16 +15,17 @@ window.onload = function () {
 }
 
 function startGame() {
-    //document.getElementById("mines-count").innerText = minesCount
+    document.getElementById("minesCounter").innerText = "💣 " + minesCount;
 
     //createBoard
-    for (let r = 0; r < rows; r++) {
+    for (let r = 1; r <= rows; r++) {
         let row = []
-        for (let c = 0; c < columns; c++) {
+        for (let c = 1; c <= columns; c++) {
             //get cell position [1-2]
             let cell = document.createElement("div")
             cell.id = r.toString() + "-" + c.toString()
             //cell.addEventListener("click, clickCell()")
+            cell.setAttribute("data-testid", r.toString() + "-" + c.toString())
             document.getElementById("board").append(cell)
             row.push(cell)
         }
