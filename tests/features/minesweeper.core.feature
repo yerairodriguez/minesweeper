@@ -25,27 +25,19 @@ Each dash means one row below it = ooo-ooo-oox'
 Background: 
 Given the user opens the app
 
-Scenario: User reveals a cell without mine nor adjacent mines
+Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
 Given the user loads the following data; "OOO-OOO-OOO"
 When the user reveals the cell [1-1]
 Then the cell is empty
 
 Scenario: User reveals an empty cell -> Should reveal adjacent empty cells
-Given user loads the following data; "OO-OO-OO"
-When the user reveals the cell [1-1]
+Given user loads the following data; "OOO-OOO-OOO"
+When the user reveals the cell [2-2]
 #Should I also put that the cells are revealed?
-Then cell [1-1] should be empty
-And cell [1-2] should be empty
-And cell [2-1] should be empty
-And cell [2-2] should be empty
-And cell [3-1] should be empty
-And cell [3-2] should be empty
+Then all the cells should be revealed
 
-#Useless scenario?
-Scenario: User reveals cell -> checking if the cell reveals correctly
-Given the user loads the following data: "OOO-OOO-OOO"
-And user reveals the cell [1-1]
-Then the mockData should have the following data: ",OO-OOO-OOO"
+Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
+*********I don't know how to write this scenario*********
 
 Scenario: User reveals mine -> game over
 Given the user loads the following data: "OOO-XOO-OOO"
