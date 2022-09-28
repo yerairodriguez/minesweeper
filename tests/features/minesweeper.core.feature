@@ -25,19 +25,60 @@ Each dash means one row below it = ooo-ooo-oox'
 Background: 
 Given the user opens the app
 
-Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
-Given the user loads the following data; "OOO-OOO-OOO"
-When the user reveals the cell [1-1]
-Then the cell is empty
+#Tagging & untagging behaviour (mined cell, questionable cell, etc)
 
-Scenario: User reveals an empty cell -> Should reveal adjacent empty cells
-Given user loads the following data; "OOO-OOO-OOO"
-When the user reveals the cell [2-2]
-#Should I also put that the cells are revealed?
-Then all the cells should be revealed
+Scenario: Tagging cell as mined, a mined symbol will appear
+When the user tags cell [1-1]
+Then cell [1-1] should show the following value: "!"
 
-Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
-*********I don't know how to write this scenario*********
+Scenario: Tagging cell as mined, the left mines counter should decrease by one
+Given untaggedMinesLeft value is: "10"
+When the user tags cell [1-1]
+Then untaggedMinesLeft value should be: "9"
+
+Scenario: Untagging cell as mined, the mined symbol will disappear
+Given the user tags as "mined" cell [1-1]
+When the user removes tags cell [1-1]
+Then cell [1-1] should show the following value: ""
+
+Scenario: Untagging cell as mined, the mines left counter should increase by one
+And untaggedMinesLeft value is: "9"
+When the user removes tags cell [1-1]
+And untaggedMinesLeft value should be: "10"
+
+Scenario: Tagging a questionable mine cell, the questionable symbol will appear
+When the user tags as "questionable" on [2-2]
+Then cell [2-2] should show the following value: "?"
+
+Scenario: Tagging a questionable mine cell, the mines left counter should not decrease nor increase
+Given untaggedMinesLeft value is: "10"
+When the user tags as "questionable" on [2-2]
+And untaggedMinesLeft display should be: "10"
+
+Scenario: Untagging a questionable mine cell, the questionable symbol will disappear
+When the user removes tag on [2-2]
+Then cell [2-2] should show the following value: ""
+
+Scenario: Untagging a questionable mine cell, the mines left counter should not decrease nor increase
+Given untaggedMinesLeft value is: "10"
+When the user removes tag on [2-2]
+And untaggedMinesLeft display should be: "10"
+
+Scenario: Negative tagged mines left 
+Given the user loads the following data: "*o"
+And the user tags as "mined" cell [1-2]
+And the mines counter should show the following value: "0"
+When the user tags as "mined" cell [1-1]
+Then untaggedMinesLeft display should be: "-1"
+
+Scenario: Incorrect tag when user reveals cell with bomb
+Given the user loads the following data: "XO"
+And the user tags as mined cell [1-2]
+And user reveals cell [1-1]
+Then game should be over
+And cell [1-1] should be marked as incorrect
+
+#End of tagging scenarios
 
 Scenario: User reveals mine -> game over
 Given the user loads the following data: "OOO-XOO-OOO"
@@ -67,10 +108,20 @@ Examples:
     | XXX-XOX-XXO |       7       |
     | XXX-XOX-XXX |       8       |
 
-Scenario Outline: User reveals a cell when there are no mines around
-Given the user loads the following data: "OOOOO-O111O-O1X1O"
+Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
+Given the user loads the following data; "OOO-OOX"
+When the user reveals the cell [1-1]
+Then the cell is empty
+
+Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
+Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
 When the user reveals cell [1-2]
-And cell [1-1] should be uncovered
+Then the mockData should have the following data: "OOOOO-O111O-O1X1O"
+
+Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
+Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
+When the user reveals cell [1-2]
+Then cell [1-1] should be uncovered
 And cell [1-3] should be uncovered
 And cell [1-4] should be uncovered
 And cell [1-5] should be uncovered
@@ -78,3 +129,12 @@ And cell [2-1] should be uncovered
 And cell [2-5] should be uncovered
 And cell [3-1] should be uncovered
 And cell [3-5] should be uncovered
+
+Scenario: An empty cell revealed by a neighbour, should reveal adjacent cell
+Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
+When the user reveals cell [1-2]
+Then cell [2-1] should be 1
+Then cell [2-2] should be 1
+Then cell [2-3] should be 1
+Then cell [3-2] should be 1
+Then cell [3-4] should be 1

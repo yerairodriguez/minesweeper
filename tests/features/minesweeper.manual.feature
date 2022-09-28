@@ -26,7 +26,7 @@ Background:
 Given the user opens the app
 
 @manual
-Scenario Outline: Cuando pulse sobre la primera celda, el contador de tiempo debe iniciarse
+Scenario Outline: User reveals cell, time counter display will start
 Then the time display should is empty
 When the user reveals cell [1-1]
 Then time counter sounter should start
