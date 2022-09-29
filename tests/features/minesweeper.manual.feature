@@ -29,12 +29,13 @@ Given the user opens the app
 Scenario Outline: User reveals cell, time counter display will start
 Then the time display should is empty
 When the user reveals cell [1-1]
-Then time counter sounter should start
+Then time counter should start
 
-@manual !!! mock???
+@manual
 Scenario Outline: Time counter max number reached
-Given the time counter should show the following value: "999"
-Then the following value should show: "∞"
+Given the user loads the following timeCounter data: "999"  
+When the user tags cell [1-1] 
+Then the following value del contador should show: "∞"
 
 @manual
 Scenario: Starting game with tag as first move

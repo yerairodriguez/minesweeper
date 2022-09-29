@@ -40,13 +40,14 @@ Then the left mines counter should be "<value>"
 
 Examples:
 | board       | value |
-| ooo-***-ooo | 3     |
-| ***-***-ooo | 6     |
+| ooo-xxx-ooo | 3     |
+| xxx-xxx-ooo | 6     |
 
 #Reset game behaviour
 
 Scenario: Reset game, return the board and counters to the initial state
-Given la liaria parda primero
+Given the user reveals cell [1-1]
+And the user tags the cell [1-2]
 When the user resets the game
 Then mines left should show the following value: "10" 
 And tagging disabled
@@ -56,7 +57,6 @@ And cells are all unreveled
 Scenario: Reseting the game with mouse, clicking the reset button
 When the user clicks on reset button
 Then the game should be reset
-
 
 #User game over & User wins behaviour
 
@@ -73,12 +73,6 @@ And cell [1-2] should be revealed
 And cell [2-1] should be revealed
 And cell [2-2] should be revealed
 
-Scenario: User game over, tagging will not be allowed
-Given the user loads the following data: "OX"
-When user reveals cell [1-2]
-And user tags cell [1-1]
-Then tagging should be disabled
-
 Scenario: User wins the game, cells will be disabled
 Given the user loads the following data: "OX"
 When user reveals cell [1-1]
@@ -89,15 +83,3 @@ Scenario: User wins the game, cells with mine will not be revealed
 Given the user loads the following data: "OX"
 When user reveals cell [1-1]
 And cell [1-2] should be unrevealed
-
-Scenario: User wins the game, tagging will not be allowed
-Given the user loads the following data: "OX"
-When user reveals cell [1-1]
-And user tags cell [1-2]
-Then tagging should be disabled
-
-Scenario: User trying to reveal a revealed cell
-Given the user loads the following data: "1X"
-Then cell [1-1] should be disabled
-And user tries to reveal cell [1-1]
-Then nothing should happen

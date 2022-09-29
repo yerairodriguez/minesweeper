@@ -4,7 +4,8 @@ Feature: Minesweeper
 
 Cell without bomb -> O  
 Cell with bomb -> X  
-Cell revealed -> ,  
+Cell revealed -> ,
+Cell covered without tags -> .  
 
 Cell flagged with suspected bomb = !  
 Cell flagged with suspected bomb but unsure about it = ?  
@@ -81,13 +82,23 @@ And cell [1-1] should be marked as incorrect
 #End of tagging scenarios
 
 Scenario: User reveals mine -> game over
-Given the user loads the following data: "OOO-XOO-OOO"
+Given the user loads the following data: 
+"""
+OOO
+XOO
+OOO
+"""
 When the user reveals cell [2-1]
 And cell [2-1] should have bomb
 Then game should be over
 
 Scenario: User reveals cell without bomb
-Given the user loads the following data: "OOO-OOO-OXO"
+Given the user loads the following data: 
+"""
+OOO
+OOO
+OXO
+"""
 When the user reveals cell [2-1]
 And cell [2,1] shouldn't have bomb
 Then game should not be over
@@ -109,32 +120,44 @@ Examples:
     | XXX-XOX-XXX |       8       |
 
 Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
-Given the user loads the following data; "OOO-OOX"
-When the user reveals the cell [1-1]
-Then the cell is empty
+Given the user loads the following data:
+"""
+OOO
+OOO
+OOO
+OOX
+"""
+When the user reveals the cell [2-2]
+Then the cell [2-2] is empty
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
-Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
-When the user reveals cell [1-2]
-Then the mockData should have the following data: "OOOOO-O111O-O1X1O"
+Given the user loads the following data: 
+"""
+OOO
+OOO
+OOO
+XXX
+"""
+When the user reveals cell [2-2]
+Then the mockData should have the following data:
+"""
+OOO
+OOO
+232
+...
+"""
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
-Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
+Given the user loads the following data: 
+"""
+OOOOO
+OOOOO
+OOXOO
+"""
 When the user reveals cell [1-2]
-Then cell [1-1] should be uncovered
-And cell [1-3] should be uncovered
-And cell [1-4] should be uncovered
-And cell [1-5] should be uncovered
-And cell [2-1] should be uncovered
-And cell [2-5] should be uncovered
-And cell [3-1] should be uncovered
-And cell [3-5] should be uncovered
-
-Scenario: An empty cell revealed by a neighbour, should reveal adjacent cell
-Given the user loads the following data: "OOOOO-OOOOO-OOXOO"
-When the user reveals cell [1-2]
-Then cell [2-1] should be 1
-Then cell [2-2] should be 1
-Then cell [2-3] should be 1
-Then cell [3-2] should be 1
-Then cell [3-4] should be 1
+Then the mockData should have the following data:
+"""
+OOOOO
+O111O
+O1.1O
+"""
