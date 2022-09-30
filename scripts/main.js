@@ -1,4 +1,3 @@
-var board = [];
 var rows = 8;
 var columns = 8;
 
@@ -15,22 +14,34 @@ window.onload = function () {
 }
 
 function startGame() {
-    document.getElementById("minesCounter").innerText = "💣 " + minesCount;
+    displayMines();
+    createBoard();
+    console.log(boardList);
+    
+}
 
-    //createBoard
+function createBoard() {
+    const board = document.getElementById('board');
+
     for (let r = 1; r <= rows; r++) {
-        let row = []
+        let row = document.createElement("div")
+        row.setAttribute("class", "row");
+        row.setAttribute("data-testid", r);
         for (let c = 1; c <= columns; c++) {
             //get cell position [1-2]
             let cell = document.createElement("div")
-            cell.id = r.toString() + "-" + c.toString()
+            cell.setAttribute("class", "cell")
             //cell.addEventListener("click, clickCell()")
             cell.setAttribute("data-testid", r.toString() + "-" + c.toString())
-            document.getElementById("board").append(cell)
-            row.push(cell)
+            row.append(cell)
         }
-        board.push(row)
+        board.append(row)
     }
-    console.log(board);
 }
 
+
+function displayMines(){
+    return document.getElementById("minesCounter").innerText = "💣 " + minesCount;
+}
+
+//function clickCell() {

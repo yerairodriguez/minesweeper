@@ -27,9 +27,10 @@ Given the user opens the app
 
 #Validations 
 
-Scenario: Validating the dimensions of the board (8x8)
-Then the number of columns in the board should be: "8"
-And the number of rows in the board should be: "8"
+@current
+Scenario: Validating the dimensions of the board
+Then the number of rows in the board should be: "8"
+And the number of cells in the board should be: "64"
 
 Scenario: Validating that all the cells must be unrevealed at the beginning of the game
 Then cells are all unreveled

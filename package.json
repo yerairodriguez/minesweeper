@@ -1,8 +1,8 @@
 {
-  "name": "calculator",
+  "name": "minesweeper",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "scripts/main.js",
   "scripts": {
     "test:e2e": "cucumber-js --require cucumber.conf.js --require tests/steps/**/*.steps.js --format @cucumber/pretty-formatter --format html:tests/reports/cucumber-report.html --tags  \"not @Manual\" \"not @done\"  --parallel 4"
   },
