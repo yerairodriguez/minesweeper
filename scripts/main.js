@@ -26,13 +26,13 @@ function createBoard() {
     for (let r = 1; r <= rows; r++) {
         let row = document.createElement("div")
         row.setAttribute("class", "row");
-        row.setAttribute("data-testid", r);
+        row.setAttribute("data-testid", "row");
         for (let c = 1; c <= columns; c++) {
             //get cell position [1-2]
             let cell = document.createElement("div")
             cell.setAttribute("class", "cell")
             //cell.addEventListener("click, clickCell()")
-            cell.setAttribute("data-testid", r.toString() + "-" + c.toString())
+            cell.setAttribute("data-testid", "cell")
             row.append(cell)
         }
         board.append(row)
