@@ -1,12 +1,8 @@
 var rows = 8;
 var columns = 8;
-
-var minesCount = 10;
 var minesLocation = []
-
 var cellsClicked = 0;
 var flagEnabled = false
-
 var gameOver = false
 
 window.onload = function () {
@@ -14,13 +10,28 @@ window.onload = function () {
 }
 
 function startGame() {
-    displayMines();
-    createBoard();
-    console.log(boardList);
-    
+    let mockdata = getURLParams('mockdata');
+    if (mockdata !== null) {
+        let rows = mockdata.length;
+        let columns = mockdata[0].length;
+        createBoard(rows, columns);
+    } else {
+        displayMines(10);
+        createBoard(rows, columns);
+    }
 }
 
-function createBoard() {
+function getURLParams(mockdataParam) {
+    const parameters = new URLSearchParams(window.location.search);
+    if (parameters.has('mockdata')) {
+        mockDataValue = parameters.get(mockdataParam).split("-");
+    } else {
+        mockDataValue = null;
+    }
+    return mockDataValue;
+}
+
+function createBoard(rows, columns) {
     const board = document.getElementById('board');
 
     for (let r = 1; r <= rows; r++) {
@@ -28,10 +39,10 @@ function createBoard() {
         row.setAttribute("class", "row");
         row.setAttribute("data-testid", "row");
         for (let c = 1; c <= columns; c++) {
-            //get cell position [1-2]
             let cell = document.createElement("div")
+            //cell.addEventListener("click", clickCell())
+            cell.id = r.toString() + "-" + c.toString()
             cell.setAttribute("class", "cell")
-            //cell.addEventListener("click, clickCell()")
             cell.setAttribute("data-testid", "cell")
             row.append(cell)
         }
@@ -39,9 +50,8 @@ function createBoard() {
     }
 }
 
-
-function displayMines(){
-    return document.getElementById("minesCounter").innerText = "💣 " + minesCount;
+function displayMines(mine) {
+    return document.getElementById("minesCounter").innerText = "💣 " + mine;
 }
 
-//function clickCell() {
+function clickCell() {}
