@@ -27,7 +27,6 @@ Given the user opens the app
 
 #Validations 
 
-@current
 Scenario: Validating the dimensions of the board
 Then the number of rows in the board should be: "8"
 And the number of cells in the board should be: "64"

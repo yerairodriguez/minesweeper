@@ -80,13 +80,13 @@ Then game should be over
 And cell [1-1] should be marked as incorrect
 
 #End of tagging scenarios
-
+@current
 Scenario: User reveals mine -> game over
 Given the user loads the following data: 
 """
-OOO
-XOO
-OOO
+OOO-
+XOO-
+OOO-
 """
 When the user reveals cell [2-1]
 And cell [2-1] should have bomb
@@ -95,9 +95,9 @@ Then game should be over
 Scenario: User reveals cell without bomb
 Given the user loads the following data: 
 """
-OOO
-OOO
-OXO
+OOO-
+OOO-
+OXO-
 """
 When the user reveals cell [2-1]
 And cell [2,1] shouldn't have bomb
@@ -122,10 +122,10 @@ Examples:
 Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
 Given the user loads the following data:
 """
-OOO
-OOO
-OOO
-OOX
+OOO-
+OOO-
+OOO-
+OOX-
 """
 When the user reveals the cell [2-2]
 Then the cell [2-2] is empty
@@ -133,31 +133,31 @@ Then the cell [2-2] is empty
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
 """
-OOO
-OOO
-OOO
-XXX
+OOO-
+OOO-
+OOO-
+XXX-
 """
 When the user reveals cell [2-2]
 Then the mockData should have the following data:
 """
-OOO
-OOO
-232
+OOO-
+OOO-
+232-
 ...
 """
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
 """
-OOOOO
-OOOOO
-OOXOO
+OOOOO-
+OOOOO-
+OOXOO-
 """
 When the user reveals cell [1-2]
 Then the mockData should have the following data:
 """
-OOOOO
-O111O
-O1.1O
+OOOOO-
+O111O-
+O1.1O-
 """
