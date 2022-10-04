@@ -40,8 +40,8 @@ Then the left mines counter should be "<value>"
 
 Examples:
 | board       | value |
-| ooo-xxx-ooo | 3     |
-| xxx-xxx-ooo | 6     |
+| OOO-XXX-OOO | 3     |
+| XXX-XXX-OOO | 6     |
 
 #Reset game behaviour
 

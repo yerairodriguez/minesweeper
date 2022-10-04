@@ -86,7 +86,7 @@ Given the user loads the following data:
 """
 OOO-
 XOO-
-OOO-
+OOO
 """
 When the user reveals cell [2-1]
 And cell [2-1] should have bomb
@@ -97,7 +97,7 @@ Given the user loads the following data:
 """
 OOO-
 OOO-
-OXO-
+OXO
 """
 When the user reveals cell [2-1]
 And cell [2,1] shouldn't have bomb
@@ -125,7 +125,7 @@ Given the user loads the following data:
 OOO-
 OOO-
 OOO-
-OOX-
+OOX
 """
 When the user reveals the cell [2-2]
 Then the cell [2-2] is empty
@@ -136,14 +136,14 @@ Given the user loads the following data:
 OOO-
 OOO-
 OOO-
-XXX-
+XXX
 """
 When the user reveals cell [2-2]
 Then the mockData should have the following data:
 """
 OOO-
 OOO-
-232-
+232
 ...
 """
 
@@ -152,12 +152,12 @@ Given the user loads the following data:
 """
 OOOOO-
 OOOOO-
-OOXOO-
+OOXOO
 """
 When the user reveals cell [1-2]
 Then the mockData should have the following data:
 """
 OOOOO-
 O111O-
-O1.1O-
+O1.1O
 """
