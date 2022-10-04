@@ -6,6 +6,9 @@ const url = 'http://127.0.0.1:5500/';
 Given('the user opens the app', async () => {
 	await page.goto(url);
 });
+Given('the user loads the following data:', async (param) => {
+	await page.goto(url + "?mockdata=" + param)
+});
 Then('the number of rows in the board should be: {string}', async (string) => {
 	const rows = await page.locator('data-testid=row')
 	let numberOfRows = await rows.count();
