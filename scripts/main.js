@@ -1,12 +1,14 @@
-var rows = 8;
-var columns = 8;
-var minesLocation = []
-var cellsClicked = 0;
-var flagEnabled = false
-var gameOver = false
+const rows = 8;
+const columns = 8;
+const minesLocation = []
+const cellsClicked = 0;
+
+let flagEnabled = false
+let gameOver = false
 
 window.onload = function () {
     startGame();
+    addClickEvent();
 }
 
 function startGame() {
@@ -16,7 +18,7 @@ function startGame() {
         let columns = mockdata[0].length;
         createBoard(rows, columns);
     } else {
-        displayMines(10);
+        displayMines(5);
         createBoard(rows, columns);
     }
 }
@@ -42,7 +44,7 @@ function createBoard(rows, columns) {
             let cell = document.createElement("div")
             //cell.addEventListener("click", clickCell())
             cell.id = r.toString() + "-" + c.toString()
-            cell.setAttribute("class", "cell")
+            cell.classList.add("cell", "unrevealed")
             cell.setAttribute("data-testid", "cell")
             row.append(cell)
         }
@@ -50,8 +52,26 @@ function createBoard(rows, columns) {
     }
 }
 
+function addClickEvent() {
+    let cells = document.getElementsByClassName("cell");
+
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].addEventListener("click", function () {
+            unrevealCell(this.getAttribute("id"));
+        });
+    }
+}
+
+function unrevealCell(cellID) {
+    let cell = document.getElementById(cellID);
+    cell.classList.remove("unrevealed");
+    cell.classList.add("revealed"); 
+}
+
 function displayMines(mine) {
     return document.getElementById("minesCounter").innerText = "💣 " + mine;
 }
 
-function clickCell() {}
+
+//if mines had class bomb 
+//step count class in board and should pass through
