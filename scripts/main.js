@@ -1,5 +1,8 @@
+import { createBoard } from "./boardContent.js";
+
 const rows = 8;
 const columns = 8;
+const minesCount = 10
 const minesLocation = []
 const cellsClicked = 0;
 
@@ -9,6 +12,7 @@ let gameOver = false
 window.onload = function () {
     startGame();
     addClickEvent();
+    console.log(minesLocation)
 }
 
 function startGame() {
@@ -18,39 +22,23 @@ function startGame() {
         let columns = mockdata[0].length;
         createBoard(rows, columns);
     } else {
-        displayMines(5);
+        generateMines();
+        displayMines(minesCount);
         createBoard(rows, columns);
     }
 }
 
 function getURLParams(mockdataParam) {
     const parameters = new URLSearchParams(window.location.search);
+    let mockDataValue = parameters.get(mockdataParam);
     if (parameters.has('mockdata')) {
-        mockDataValue = parameters.get(mockdataParam).split("-");
+        mockDataValue = mockDataValue.split("-");
     } else {
         mockDataValue = null;
     }
     return mockDataValue;
 }
 
-function createBoard(rows, columns) {
-    const board = document.getElementById('board');
-
-    for (let r = 1; r <= rows; r++) {
-        let row = document.createElement("div")
-        row.setAttribute("class", "row");
-        row.setAttribute("data-testid", "row");
-        for (let c = 1; c <= columns; c++) {
-            let cell = document.createElement("div")
-            //cell.addEventListener("click", clickCell())
-            cell.id = r.toString() + "-" + c.toString()
-            cell.classList.add("cell", "unrevealed")
-            cell.setAttribute("data-testid", "cell")
-            row.append(cell)
-        }
-        board.append(row)
-    }
-}
 
 function addClickEvent() {
     let cells = document.getElementsByClassName("cell");
@@ -58,6 +46,9 @@ function addClickEvent() {
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener("click", function () {
             unrevealCell(this.getAttribute("id"));
+        });
+        cells[i].addEventListener("click", function () {
+            checkMine(this.getAttribute("id"));
         });
     }
 }
@@ -68,10 +59,37 @@ function unrevealCell(cellID) {
     cell.classList.add("revealed"); 
 }
 
+function generateMines() {
+    let minesLeft = minesCount;
+    while (minesLeft > 0) {
+        let r = Math.floor(Math.random() * rows) + 1;
+        let c = Math.floor(Math.random() * columns)+ 1;
+        let id = r.toString() + "-" + c.toString()
+        
+        if (!minesLocation.includes(id)){
+            minesLocation.push(id);
+            minesLeft -= 1;
+        }
+    }
+}
+
+function checkMine(cellID){
+    let cell = document.getElementById(cellID);
+    if(minesLocation.includes(cell.id)){
+    cell.innerText = "💣"
+    alert("GAME OVER");
+    gameOver = true;
+    return;
+    }
+}
+
+function setMineIntoCell(id){
+    let cell = document.getElementById(id);
+    cell.classList.add("mined");
+}
+
 function displayMines(mine) {
     return document.getElementById("minesCounter").innerText = "💣 " + mine;
 }
-
-
 //if mines had class bomb 
 //step count class in board and should pass through
