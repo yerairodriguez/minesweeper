@@ -42,7 +42,6 @@ function getURLParams(mockdataParam) {
 
 function addClickEvent() {
     let cells = document.getElementsByClassName("cell");
-
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener("click", function () {
             unrevealCell(this.getAttribute("id"));
@@ -83,13 +82,6 @@ function checkMine(cellID){
     }
 }
 
-function setMineIntoCell(id){
-    let cell = document.getElementById(id);
-    cell.classList.add("mined");
-}
-
 function displayMines(mine) {
     return document.getElementById("minesCounter").innerText = "💣 " + mine;
 }
-//if mines had class bomb 
-//step count class in board and should pass through
