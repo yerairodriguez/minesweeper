@@ -16,7 +16,7 @@ function createRow(rowID, numOfColumns) {
     row.classList.add("row");
     row.setAttribute("data-testid", "row");
     for (let c = 1; c <= numOfColumns; c++) {
-        let cell = createCell(rowID, numOfColumns);
+        let cell = createCell(rowID, c);
         row.appendChild(cell);
         rowArray.push(cell);
     }
