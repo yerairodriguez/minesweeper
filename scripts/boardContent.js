@@ -1,4 +1,4 @@
-const boardArray = [];
+export const boardArray = [];
 
 
 export function createBoard(numOfRows, numOfColumns) {
