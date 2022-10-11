@@ -27,7 +27,7 @@ function createRow(rowID, numOfColumns) {
 function createCell(rowID, columnID) {
     let cell = document.createElement("div");
     cell.id = rowID.toString() + "-" + columnID.toString();
-    cell.classList.add("cell", "unrevealed");
+    cell.classList.add("cell");
     cell.setAttribute("data-testid", "cell");
     return cell;
 }
