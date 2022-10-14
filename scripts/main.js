@@ -59,6 +59,10 @@ function addClickEvent() {
             unrevealCell(this.getAttribute("id"));
             checkCell(this.getAttribute("id"));
         });
+        cells[i].addEventListener("contextmenu", function (event) {
+            event.preventDefault();
+            tagCell(this.getAttribute("id"));
+        });
     }
 }
 
@@ -66,6 +70,9 @@ function unrevealCell(cellID) {
     let cell = document.getElementById(cellID);
     if (gameOver === false) {
         cell.classList.add("revealed");
+        //cell.innerText = "1";
+        //cell.classList.add("x1");
+        console.log(cell);
     }
 }
 
@@ -96,22 +103,26 @@ function checkCell(cellID) {
         gameOver = true;
         return;
     }
-    let coords = cell.id.split("-")
-    let r = parseInt(coords[0]);
-    let c = parseInt(coords[1]);
-    checkMine(r, c);
 }
 
 function revealMinesWhenGameOver() {
-    for (let r= 0; r < rows; r++) {
+    for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             let cell = boardArray[r][c];
             if (minesLocation.includes(cell.id)) {
                 cell.classList.add("revealed");
                 cell.classList.add("mined");
-                cell.innerText = "💣";            
+                cell.innerText = "💣";
             }
         }
     }
 }
 
+function tagCell(cellID) {
+    let cellTag = document.getElementById(cellID);
+    if (cellTag.innerText === "") {
+        cellTag.innerText = "🚩"
+    }else if (cellTag.innerText === "🚩"){
+        cellTag.innerText = ""
+    }
+}
