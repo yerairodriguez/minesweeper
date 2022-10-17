@@ -32,11 +32,11 @@ function startGame() {
         }
         let rows = mockdata.length;
         let columns = mockdata[0].length;
-        displayMines(mockdataMinesCount);
+        displayMinesLeft(mockdataMinesCount);
         createBoard(rows, columns);
     } else {
         generateMines(minesCount);
-        displayMines(minesCount);
+        displayMinesLeft(minesCount);
         createBoard(rows, columns);
     }
 }
@@ -89,8 +89,8 @@ function generateMines(minesAmount) {
     }
 }
 
-function displayMines() {
-    return document.getElementById("minesCounter").innerText = "💣 " + minesCount;
+function displayMinesLeft() {
+    return document.getElementById("minesCounter").innerText = minesCount;
 }
 
 function checkCell(cellID) {
@@ -122,7 +122,7 @@ function tagCell(cellID) {
     let cellTag = document.getElementById(cellID);
     if (cellTag.innerText === "") {
         cellTag.innerText = "🚩"
-    }else if (cellTag.innerText === "🚩"){
+    } else if (cellTag.innerText === "🚩") {
         cellTag.innerText = ""
     }
 }

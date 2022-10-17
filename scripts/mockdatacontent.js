@@ -38,3 +38,18 @@ export const parseMockDataToString = (data) => {
     }
     return isValidData
   }
+
+
+//function createBoardFromMockData(data) {
+//  const board = []
+//  const mockBoard = data.split('-').map((row) => {return row.split('') })
+//
+//  for (let row = 0; row < mockBoard.length; row++) {
+//    board.push([])
+//    for (let column = 0; column < mockBoard[0].length; column++) {
+//      board[row].push({})
+//    }
+//  }
+//  
+//}
+// add cell values 

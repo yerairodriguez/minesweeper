@@ -10,11 +10,17 @@
 
 <body>
     <div id="wrapped">
-        <div id="minesCounter"></div>
-        <div id="board" data-testid="board"></div>
-        <div id="mockdata-content">
-            <textarea id="mockdata" placeholder="Insert mockdata" ></textarea>
+        <div id="dataContainer">
+            <div id="mineIcon">💣</div>
+            <div id="minesCounter"></div>
+            <div id="timer">00:00</div>
         </div>
+        <div id="board" data-testid="board"></div>
+        <button id="resetButton">Reset</button>
+        <div id="mockdata-content">
+            <textarea id="mockdata" placeholder="Insert mockdata"></textarea>
+        </div>
+        <button id="loadMockData">Load</button>
     </div>
 </body>
 
