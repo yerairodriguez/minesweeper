@@ -15,7 +15,7 @@ Then('the number of rows in the board should be: {string}', async (string) => {
 	expect(numberOfRows.toString()).toBe(string);
 });
 Then('the number of cells in the board should be: {string}', async (string) => {
-	const cells = await page.locator('data-testid=cell')
+	const cells = await page.locator('.cell')
 	let numberOfColumns = await cells.count();
 	expect(numberOfColumns.toString()).toBe(string);
 });
@@ -27,3 +27,4 @@ Then('cells are all unreveled', async () =>{
 		expect(singleCell).toBe(false);
 	}	
 });
+
