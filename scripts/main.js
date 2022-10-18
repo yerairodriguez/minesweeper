@@ -89,6 +89,7 @@ function revealCell(cell, splittedID){
     cell.classList.add("revealed");
     if (arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines != 0) {
         cell.innerText = arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines
+        cell.classList.add("x" + arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines)
     }else{
         revealEmptyCell(splittedID);
     }
