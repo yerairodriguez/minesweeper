@@ -88,6 +88,9 @@ body {
     text-align: center;;
     background-color: red;
 }
+.disabled{
+    pointer-events: none !important; 
+}
 .x1{
     color: blue;
 }
