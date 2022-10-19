@@ -212,12 +212,9 @@ function adjacentMines() {
 }
 
 function revealEmptyCell(splittedID) {
-    let r = splittedID[0]
-    let c = splittedID[1]
+    let r = parseInt(splittedID[0])
+    let c = parseInt(splittedID[1])
     let cell;
-    console.log(arrayCellInfo[r][c])
-    console.log(r)
-    console.log(c)
     if (r + 1 < arrayCellInfo.length && !arrayCellInfo[r+1][c].isRevealed) {
         arrayCellInfo[r+1][c].isRevealed = true
         splittedID = (r+1) + "-"+ c
