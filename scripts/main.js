@@ -6,12 +6,14 @@ const defaultCell = {
     isTagged: "",
     numOfAdjacentMines: 0
 }
-
+let arrayCellInfo;
 let rows = 8;
 let columns = 8;
-let minesCount = 10
-let arrayCellInfo;
-let gameOver = false
+let minesCount = 10;
+let gameOver = false;
+let timer = document.getElementById("timer");
+let totalSeconds = 0;
+let interval = null; 
 
 window.onload = function () {
     startGame();
@@ -47,10 +49,12 @@ function addClickEvent() {
     let cells = document.getElementsByClassName("cell");
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener("click", function () {
+            startTimer();
             unrevealCell(this.getAttribute("id"));
         });
         cells[i].addEventListener("contextmenu", function (event) {
             event.preventDefault();
+            startTimer();
             let id = this.getAttribute("id")
             let splittedID = id.split("-");
             if (!arrayCellInfo[splittedID[0]][splittedID[1]].isRevealed) {
@@ -83,6 +87,8 @@ function unrevealCell(cellID) {
         if (arrayCellInfo[splittedID[0]][splittedID[1]].isMined) {
             revealMine(cell);
             revealMinesWhenGameOver(cell);
+            wrongTagWhenRevealAllMines();
+            stopTimer();
             gameOver = true;
         } else if (!gameOver) {
             getNumOfAdjacentMines(cell, splittedID);
@@ -154,6 +160,19 @@ function revealMinesWhenGameOver() {
                 cell.classList.add("revealed");
                 cell.classList.add("mined");
                 cell.innerText = "💣";
+            }
+        }
+    }
+}
+
+function wrongTagWhenRevealAllMines() {
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns; c++) {
+            if (arrayCellInfo[r][c].isTagged && !arrayCellInfo[r][c].isMined) {
+                arrayCellInfo[r][c].innerText = "❌"
+                arrayCellInfo[r][c].isTagged = "incorrect"
+                console.log(arrayCellInfo[r][c].innerText);
+                console.log(arrayCellInfo)
             }
         }
     }
@@ -278,6 +297,38 @@ function revealEmptyCell(splittedID) {
     }
 }
 
+function createTimer() {
+    ++totalSeconds;
+
+    let hour = Math.floor(totalSeconds /3600);
+    let minute = Math.floor((totalSeconds - hour*3600)/60);
+    let seconds = totalSeconds - (hour*3600 + minute*60);
+
+    if(hour < 10) hour = "0"+ hour;
+    if(minute < 10) minute = "0"+ minute;
+    if(seconds < 10) seconds = "0"+ seconds;
+
+    timer.innerHTML = minute + ":" + seconds;
+ }
+
+ function startTimer(){
+    if(interval == null){
+        interval = setInterval(createTimer, 1000);
+    } else{
+        return
+    }
+}
+
+function stopTimer() {
+    clearInterval(interval);
+    interval = null;
+}
+
+function resetTimer(){
+    stopTimer();
+    totalSeconds = 0;
+    timer.innerText = "00:00";
+}
 
 function deleteBoard() {
     let board = document.getElementById("board");
@@ -290,4 +341,5 @@ function resetBoard() {
     deleteBoard();  
     startGame();
     addClickEvent();
+    resetTimer();
 }  
