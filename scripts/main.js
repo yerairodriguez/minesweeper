@@ -1,4 +1,5 @@
 import { createBoard } from "./boardContent.js";
+
 const defaultCell = {
     isMined: false,
     isRevealed: false,
@@ -10,7 +11,6 @@ let rows = 8;
 let columns = 8;
 let minesCount = 10
 let arrayCellInfo;
-let flagEnabled = false
 let gameOver = false
 
 window.onload = function () {
@@ -43,6 +43,7 @@ function getURLParams(mockdataParam) {
 }
 
 function addClickEvent() {
+    let resetButton = document.getElementById("resetButton");
     let cells = document.getElementsByClassName("cell");
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener("click", function () {
@@ -58,6 +59,9 @@ function addClickEvent() {
             }
         });
     }
+    resetButton.addEventListener('click', function (e) {
+        resetBoard();
+    });
 }
 
 function arrayInfo() {
@@ -79,21 +83,22 @@ function unrevealCell(cellID) {
         if (arrayCellInfo[splittedID[0]][splittedID[1]].isMined) {
             revealMine(cell);
             revealMinesWhenGameOver(cell);
-        }else{
-            revealCell(cell, splittedID);
+            gameOver = true;
+        } else if (!gameOver) {
+            getNumOfAdjacentMines(cell, splittedID);
         }
     }
 }
 
-function revealCell(cell, splittedID){
+function getNumOfAdjacentMines(cell, splittedID) {
     cell.classList.add("revealed");
     if (arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines != 0) {
         cell.innerText = arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines
         cell.classList.add("x" + arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines)
-    }else{
+    } else {
         revealEmptyCell(splittedID);
     }
-    
+
 }
 
 function revealMine(cell) {
@@ -109,9 +114,9 @@ function generateMines() {
         let c = Math.floor(Math.random() * columns);
         let id = r.toString() + "-" + c.toString()
 
-        if (!arrayCellInfo[r][c].isMined){
+        if (!arrayCellInfo[r][c].isMined) {
             arrayCellInfo[r][c].isMined = true
-            minesAmount --;
+            minesAmount--;
         }
     }
 }
@@ -143,7 +148,7 @@ function displayMinesLeft() {
 function revealMinesWhenGameOver() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
-            if (arrayCellInfo[r][c].isMined ) {
+            if (arrayCellInfo[r][c].isMined) {
                 let cell = r + "-" + c
                 cell = document.getElementById(cell);
                 cell.classList.add("revealed");
@@ -156,12 +161,12 @@ function revealMinesWhenGameOver() {
 
 function displayTagCell(cellID, splittedID) {
     let cellTag = document.getElementById(cellID);
-    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag"){
+    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag") {
         cellTag.innerText = "🚩"
         minesCount--;
-    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == ""){
+    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "") {
         cellTag.innerText = ""
-    }else{
+    } else {
         cellTag.innerText = "❓"
         minesCount++;
     }
@@ -169,41 +174,41 @@ function displayTagCell(cellID, splittedID) {
 }
 
 function tagCell(splittedID) {
-    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag"){
+    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag") {
         arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = "questionMark";
-    }else if(arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == ""){
+    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "") {
         arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = "flag";
-    }else{
+    } else {
         arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = ""
     }
 }
 
 function adjacentMines() {
     for (let r = 0; r < rows; r++) {
-        for (let c= 0; c < columns; c++) {
+        for (let c = 0; c < columns; c++) {
             if (!arrayCellInfo[r][c].isMined) {
-                if (r - 1 >= 0 && arrayCellInfo[r-1][c].isMined) {
+                if (r - 1 >= 0 && arrayCellInfo[r - 1][c].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (r + 1 < arrayCellInfo.length && arrayCellInfo[r+1][c].isMined) {
+                if (r + 1 < arrayCellInfo.length && arrayCellInfo[r + 1][c].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (c - 1 >= 0 && arrayCellInfo[r][c-1].isMined ) {
+                if (c - 1 >= 0 && arrayCellInfo[r][c - 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (c + 1 < arrayCellInfo.length && arrayCellInfo[r][c+1].isMined ) {
+                if (c + 1 < arrayCellInfo.length && arrayCellInfo[r][c + 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (r - 1 >= 0 && c - 1 >= 0 && arrayCellInfo[r-1][c-1].isMined) {
+                if (r - 1 >= 0 && c - 1 >= 0 && arrayCellInfo[r - 1][c - 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (r + 1 < arrayCellInfo.length && c + 1 < arrayCellInfo.length && arrayCellInfo[r+1][c+1].isMined) {
+                if (r + 1 < arrayCellInfo.length && c + 1 < arrayCellInfo.length && arrayCellInfo[r + 1][c + 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (r - 1 >= 0 && c + 1 < arrayCellInfo.length && arrayCellInfo[r-1][c+1].isMined ) {
+                if (r - 1 >= 0 && c + 1 < arrayCellInfo.length && arrayCellInfo[r - 1][c + 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
-                if (r + 1 < arrayCellInfo.length && c - 1 >= 0 && arrayCellInfo[r+1][c-1].isMined ) {
+                if (r + 1 < arrayCellInfo.length && c - 1 >= 0 && arrayCellInfo[r + 1][c - 1].isMined) {
                     arrayCellInfo[r][c].numOfAdjacentMines++
                 }
             }
@@ -215,60 +220,74 @@ function revealEmptyCell(splittedID) {
     let r = parseInt(splittedID[0])
     let c = parseInt(splittedID[1])
     let cell;
-    if (r + 1 < arrayCellInfo.length && !arrayCellInfo[r+1][c].isRevealed) {
-        arrayCellInfo[r+1][c].isRevealed = true
-        splittedID = (r+1) + "-"+ c
+    if (r + 1 < arrayCellInfo.length && !arrayCellInfo[r + 1][c].isRevealed) {
+        arrayCellInfo[r + 1][c].isRevealed = true
+        splittedID = (r + 1) + "-" + c
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (r - 1 >= 0 && !arrayCellInfo[r-1][c].isRevealed) {
-        arrayCellInfo[r-1][c].isRevealed = true
-        splittedID = (r-1) + "-"+ c
+    if (r - 1 >= 0 && !arrayCellInfo[r - 1][c].isRevealed) {
+        arrayCellInfo[r - 1][c].isRevealed = true
+        splittedID = (r - 1) + "-" + c
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (c - 1 >= 0 && !arrayCellInfo[r][c-1].isRevealed ) {
-        arrayCellInfo[r][c-1].isRevealed = true
-        splittedID = r + "-"+ (c-1)
+    if (c - 1 >= 0 && !arrayCellInfo[r][c - 1].isRevealed) {
+        arrayCellInfo[r][c - 1].isRevealed = true
+        splittedID = r + "-" + (c - 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (c + 1 < arrayCellInfo.length && !arrayCellInfo[r][c+1].isRevealed ) {
-        arrayCellInfo[r][c+1].isRevealed = true
-        splittedID = r + "-"+ (c+1)
+    if (c + 1 < arrayCellInfo.length && !arrayCellInfo[r][c + 1].isRevealed) {
+        arrayCellInfo[r][c + 1].isRevealed = true
+        splittedID = r + "-" + (c + 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (r - 1 >= 0 && c - 1 >= 0 && !arrayCellInfo[r-1][c-1].isRevealed) {
-        arrayCellInfo[r-1][c-1].isRevealed = true
-        splittedID = (r-1) + "-"+ (c-1)
+    if (r - 1 >= 0 && c - 1 >= 0 && !arrayCellInfo[r - 1][c - 1].isRevealed) {
+        arrayCellInfo[r - 1][c - 1].isRevealed = true
+        splittedID = (r - 1) + "-" + (c - 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (r + 1 < arrayCellInfo.length && c + 1 < arrayCellInfo.length && !arrayCellInfo[r+1][c+1].isRevealed) {
-        arrayCellInfo[r+1][c+1].isRevealed = true
-        splittedID = (r+1) + "-"+ (c+1)
+    if (r + 1 < arrayCellInfo.length && c + 1 < arrayCellInfo.length && !arrayCellInfo[r + 1][c + 1].isRevealed) {
+        arrayCellInfo[r + 1][c + 1].isRevealed = true
+        splittedID = (r + 1) + "-" + (c + 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (r - 1 >= 0 && c + 1 < arrayCellInfo.length && !arrayCellInfo[r-1][c+1].isRevealed) {
-        arrayCellInfo[r-1][c+1].isRevealed = true
-        splittedID = (r-1) + "-"+ (c+1)
+    if (r - 1 >= 0 && c + 1 < arrayCellInfo.length && !arrayCellInfo[r - 1][c + 1].isRevealed) {
+        arrayCellInfo[r - 1][c + 1].isRevealed = true
+        splittedID = (r - 1) + "-" + (c + 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
-    if (r + 1 < arrayCellInfo.length && c - 1 >= 0 && !arrayCellInfo[r+1][c-1].isRevealed) {
-        arrayCellInfo[r+1][c-1].isRevealed = true
-        splittedID = (r+1) + "-"+ (c-1)
+    if (r + 1 < arrayCellInfo.length && c - 1 >= 0 && !arrayCellInfo[r + 1][c - 1].isRevealed) {
+        arrayCellInfo[r + 1][c - 1].isRevealed = true
+        splittedID = (r + 1) + "-" + (c - 1)
         cell = document.getElementById(splittedID)
         splittedID = splittedID.split("-")
-        revealCell(cell, splittedID)
+        getNumOfAdjacentMines(cell, splittedID)
     }
 }
+
+
+function deleteBoard() {
+    let board = document.getElementById("board");
+    board.innerHTML = ""
+}
+
+function resetBoard() {
+    gameOver = false;
+    minesCount = 10 
+    deleteBoard();  
+    startGame();
+    addClickEvent();
+}  
