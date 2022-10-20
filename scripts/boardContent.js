@@ -1,4 +1,3 @@
-
 export function createBoard(numOfRows, numOfColumns) {
     let board = document.getElementById('board');
     for (let r = 0; r < numOfRows; r++) {
@@ -9,15 +8,13 @@ export function createBoard(numOfRows, numOfColumns) {
 
 function createRow(rowID, numOfColumns) {
     let row = document.createElement("div")
-    let rowArray = [];
+    row.id = rowID;
     row.classList.add("row");
     row.setAttribute("data-testid", "row");
     for (let c = 0; c < numOfColumns; c++) {
         let cell = createCell(rowID, c);
         row.appendChild(cell);
-
     }
-
     return row;
 }
 
