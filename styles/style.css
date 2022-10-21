@@ -71,6 +71,13 @@ body {
     font-size: 40px;
 }
 
+#gameResult{
+    position: relative;
+    margin-left: 95px;
+    align-items: center;
+    font-size: 30px;
+}
+
 #timer{
     position: absolute;;
     right: 0;
