@@ -26,60 +26,6 @@ Each dash means one row below it = ooo-ooo-oox'
 Background: 
 Given the user opens the app
 
-#Tagging & untagging behaviour (mined cell, questionable cell, etc)
-
-Scenario: Tagging cell as mined, a mined symbol will appear
-When the user tags cell [1-1]
-Then cell [1-1] should show the following value: "!"
-
-Scenario: Tagging cell as mined, the left mines counter should decrease by one
-Given untaggedMinesLeft value is: "10"
-When the user tags cell [1-1]
-Then untaggedMinesLeft value should be: "9"
-
-Scenario: Untagging cell as mined, the mined symbol will disappear
-Given the user tags as "mined" cell [1-1]
-When the user removes tags cell [1-1]
-Then cell [1-1] should show the following value: ""
-
-Scenario: Untagging cell as mined, the mines left counter should increase by one
-And untaggedMinesLeft value is: "9"
-When the user removes tags cell [1-1]
-And untaggedMinesLeft value should be: "10"
-
-Scenario: Tagging a questionable mine cell, the questionable symbol will appear
-When the user tags as "questionable" on [2-2]
-Then cell [2-2] should show the following value: "?"
-
-Scenario: Tagging a questionable mine cell, the mines left counter should not decrease nor increase
-Given untaggedMinesLeft value is: "10"
-When the user tags as "questionable" on [2-2]
-And untaggedMinesLeft display should be: "10"
-
-Scenario: Untagging a questionable mine cell, the questionable symbol will disappear
-When the user removes tag on [2-2]
-Then cell [2-2] should show the following value: ""
-
-Scenario: Untagging a questionable mine cell, the mines left counter should not decrease nor increase
-Given untaggedMinesLeft value is: "10"
-When the user removes tag on [2-2]
-And untaggedMinesLeft display should be: "10"
-
-Scenario: Negative tagged mines left 
-Given the user loads the following data: "*o"
-And the user tags as "mined" cell [1-2]
-And the mines counter should show the following value: "0"
-When the user tags as "mined" cell [1-1]
-Then untaggedMinesLeft display should be: "-1"
-
-Scenario: Incorrect tag when user reveals cell with bomb
-Given the user loads the following data: "XO"
-And the user tags as mined cell [1-2]
-And user reveals cell [1-1]
-Then game should be over
-And cell [1-1] should be marked as incorrect
-
-#End of tagging scenarios
 @current
 Scenario: User reveals mine -> game over
 Given the user loads the following data: 
@@ -88,9 +34,9 @@ OOO-
 XOO-
 OOO
 """
-When the user reveals cell [2-1]
-And cell [2-1] should have bomb
-Then game should be over
+When the user reveals cell [1-0]
+Then cell [1-0] should have bomb
+And game should be over
 
 Scenario: User reveals cell without bomb
 Given the user loads the following data: 
@@ -99,14 +45,14 @@ OOO-
 OOO-
 OXO
 """
-When the user reveals cell [2-1]
-And cell [2,1] shouldn't have bomb
+When the user reveals cell [1-0]
+And cell [1-0] shouldn't have bomb
 Then game should not be over
 
 Scenario Outline: User reveals a cell with no bomb -> shows number of adjacent mines 
 Given the user loads the following data: "<mockData>"
-When the user reveals cell [2-2]
-Then the cell [2-2] should show the following value: "<adjacentMines>"
+When the user reveals cell [1-1]
+Then the cell [1-1] should show the following value: "<adjacentMines>"
 
 Examples:
     |   mockData  | adjacentMines |
@@ -127,8 +73,8 @@ OOO-
 OOO-
 OOX
 """
-When the user reveals the cell [2-2]
-Then the cell [2-2] is empty
+When the user reveals the cell [1-1]
+Then the cell [1-1] is empty
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
@@ -138,7 +84,7 @@ OOO-
 OOO-
 XXX
 """
-When the user reveals cell [2-2]
+When the user reveals cell [1-1]
 Then the mockData should have the following data:
 """
 OOO-
@@ -154,10 +100,64 @@ OOOOO-
 OOOOO-
 OOXOO
 """
-When the user reveals cell [1-2]
+When the user reveals cell [0-1]
 Then the mockData should have the following data:
 """
 OOOOO-
 O111O-
 O1.1O
 """
+#Tagging & untagging behaviour (mined cell, questionable cell, etc)
+
+Scenario: Tagging cell as mined, a mined symbol will appear
+When the user tags cell [0-0]
+Then cell [0-0] should show the following value: "🚩"
+
+Scenario: Tagging cell as mined, the left mines counter should decrease by one
+Given untaggedMinesLeft value is: "10"
+When the user tags cell [0-0]
+Then untaggedMinesLeft value should be: "9"
+
+Scenario: Untagging cell as mined, the mined symbol will disappear
+Given the user tags as "mined" cell [0-0]
+When the user removes tags cell [0-0]
+Then cell [0-0] should show the following value: ""
+
+Scenario: Untagging cell as mined, the mines left counter should increase by one
+And untaggedMinesLeft value is: "9"
+When the user removes tags cell [0-0]
+And untaggedMinesLeft value should be: "10"
+
+Scenario: Tagging a questionable mine cell, the questionable symbol will appear
+When the user tags as "questionable" on [1-1]
+Then cell [1-1] should show the following value: "?"
+
+Scenario: Tagging a questionable mine cell, the mines left counter should not decrease nor increase
+Given untaggedMinesLeft value is: "10"
+When the user tags as "questionable" on [1-1]
+And untaggedMinesLeft display should be: "10"
+
+Scenario: Untagging a questionable mine cell, the questionable symbol will disappear
+When the user removes tag on [1-1]
+Then cell [1-1] should show the following value: ""
+
+Scenario: Untagging a questionable mine cell, the mines left counter should not decrease nor increase
+Given untaggedMinesLeft value is: "10"
+When the user removes tag on [1-1]
+And untaggedMinesLeft display should be: "10"
+
+Scenario: Negative tagged mines left 
+Given the user loads the following data: "*o"
+And the user tags as "mined" cell [0-1]
+And the mines counter should show the following value: "0"
+When the user tags as "mined" cell [0-0]
+Then untaggedMinesLeft display should be: "-1"
+
+Scenario: Incorrect tag when user reveals cell with bomb
+Given the user loads the following data: "XO"
+And the user tags as mined cell [0-1]
+And user reveals cell [0-0]
+Then game should be over
+And cell [0-0] should be marked as incorrect
+
+#End of tagging scenarios
