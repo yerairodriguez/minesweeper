@@ -67,4 +67,4 @@ And cell "[1-1]" should be revealed with mine
 Scenario: User wins the game, cells with mine will not be revealed  
 Given the user loads the following data: "OX"
 When the user reveals cell "[0-0]"
-And cell "[0-1]" should be unrevealed
+Then cell "[0-1]" should be unrevealed
