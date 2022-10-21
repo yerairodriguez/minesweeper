@@ -34,7 +34,6 @@ And the number of cells in the board should be: "64"
 Scenario: Validating that all the cells must be unrevealed at the beginning of the game
 Then cells are all unreveled
 
-
 Scenario Outline: Validating the default mines left counter value
 Given the user loads the following data: "<board>"
 Then the left mines counter should be: "<value>"
@@ -63,7 +62,6 @@ Then cell "[0-1]" should be revealed with mine
 And cell "[1-0]" should be revealed with mine
 And cell "[1-1]" should be revealed with mine
 
-@current
 Scenario: User wins the game, cells with mine will not be revealed  
 Given the user loads the following data: "OX"
 When the user reveals cell "[0-0]"
