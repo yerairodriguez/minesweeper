@@ -14,6 +14,7 @@ let minesCount = 10;
 let gameOver = false;
 let timer = document.getElementById("timer");
 let result = document.getElementById("gameResult");
+let board = document.getElementById("board");
 let totalSeconds = 0;
 let interval = null;
 
@@ -76,9 +77,13 @@ function addClickEvents() {
 }
 
 function removeEventListener() {
-    let board = document.getElementById("board");
     board.removeEventListener("click", stopProp, { capture: true });
     board.removeEventListener("contextmenu", stopProp, { capture: true });
+}
+
+function stopEventListener(params) {
+    board.addEventListener("click", stopProp, { capture: true });
+    board.addEventListener("contextmenu", stopProp, { capture: true });
 }
 
 function stopProp(e) {
@@ -117,7 +122,6 @@ function generateMines() {
     while (minesAmount > 0) {
         let r = Math.floor(Math.random() * rows);
         let c = Math.floor(Math.random() * columns);
-        let id = r.toString() + "-" + c.toString()
 
         if (!arrayCellInfo[r][c].isMined) {
             arrayCellInfo[r][c].isMined = true
@@ -228,9 +232,7 @@ function revealMinesWhenGameOver() {
             if (arrayCellInfo[r][c].isMined) {
                 let cell = r + "-" + c
                 cell = document.getElementById(cell);
-                cell.classList.add("revealed");
-                cell.classList.add("mined");
-                cell.innerText = "💣";
+                revealMine(cell);
             }
         }
     }
@@ -330,6 +332,7 @@ function displayTagCell(cellID, splittedID) {
 }
 
 function checkWin() {
+    let board = document.getElementById("board");
     let count = 0;
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
@@ -340,6 +343,8 @@ function checkWin() {
     }
     if (count == (rows * columns) - minesCount) {
         stopTimer();
+        board.addEventListener("click", stopProp, { capture: true });
+        board.addEventListener("contextmenu", stopProp, { capture: true });
         return true;
     }
     return false;
