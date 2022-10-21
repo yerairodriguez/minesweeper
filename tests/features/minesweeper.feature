@@ -34,9 +34,10 @@ And the number of cells in the board should be: "64"
 Scenario: Validating that all the cells must be unrevealed at the beginning of the game
 Then cells are all unreveled
 
+
 Scenario Outline: Validating the default mines left counter value
 Given the user loads the following data: "<board>"
-Then the left mines counter should be "<value>"
+Then the left mines counter should be: "<value>"
 
 Examples:
 | board       | value |
@@ -46,40 +47,24 @@ Examples:
 #Reset game behaviour
 
 Scenario: Reset game, return the board and counters to the initial state
-Given the user reveals cell [1-1]
-And the user tags the cell [1-2]
+Given the user reveals cell "[0-0]"
+And the user tags the cell "[0-1]"
 When the user resets the game
-Then mines left should show the following value: "10" 
-And tagging disabled
-And timeCounter display should show the following value: ""
+Then the left mines counter should be: "10" 
+And timeCounter display should show the following value: "00:00"
 And cells are all unreveled
-
-Scenario: Reseting the game with mouse, clicking the reset button
-When the user clicks on reset button
-Then the game should be reset
 
 #User game over & User wins behaviour
 
-Scenario: User game over, cells will be disabled
-Given the user loads the following data: "OX"
-When user reveals cell [1-2]
-And cell [1-1] should be disabled
-And cell [1-2] should be disabled
-
 Scenario: User game over, cells with mine will be revealed
 Given the user loads the following data: "OX-XX"
-When user reveals cell [1-2]
-And cell [1-2] should be revealed
-And cell [2-1] should be revealed
-And cell [2-2] should be revealed
+When the user reveals cell "[0-1]"
+Then cell "[0-1]" should be revealed with mine
+And cell "[1-0]" should be revealed with mine
+And cell "[1-1]" should be revealed with mine
 
-Scenario: User wins the game, cells will be disabled
-Given the user loads the following data: "OX"
-When user reveals cell [1-1]
-And cell [1-1] should be disabled
-And cell [1-2] should be disabled 
-
+@current
 Scenario: User wins the game, cells with mine will not be revealed  
 Given the user loads the following data: "OX"
-When user reveals cell [1-1]
-And cell [1-2] should be unrevealed
+When the user reveals cell "[0-0]"
+And cell "[0-1]" should be unrevealed

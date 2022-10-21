@@ -62,3 +62,10 @@ Scenario: User wins the game, time counter should be stopped
 Given the user loads the following data: "OX"
 When user reveals cell [1-1]
 Then time counter should be stopped
+
+@manual
+Scenario: User game over, cells will be disabled
+Given the user loads the following data: "OX"
+When user reveals cell "[1-2]"
+And cell "[1-1]" should be disabled
+And cell "[1-2]" should be disabled
