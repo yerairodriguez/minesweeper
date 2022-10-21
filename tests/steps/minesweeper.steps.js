@@ -55,3 +55,7 @@ Then('cell {string} should be revealed with mine', async (string) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe("💣");
 });
+Then('cell {string} should be unrevealed', async (string) =>{
+	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
+	expect(cell).toBe("");
+});
