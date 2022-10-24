@@ -93,17 +93,18 @@ Then('cell {string} should be unrevealed', async (string) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe("");
 });
-Then('the cell {string} should show the following value: {string}', async (string, string2) =>{
+Then('cell {string} should show the following value: {string}', async (string, string2) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe(string2);
 });
-Then('the cell {string} should be empty', async (string) =>{
+Then('cell {string} should be empty', async (string) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe("");
 });
 Then('the mockData should have the following data:', async (cellValue) =>{
 	await checkCell(cellValue.replaceAll("\n", "-"));
 });
+
 Then('game should be over', async () =>{
 	const gameResult = await page.locator('data-testid=gameResult').innerText();
 	expect(gameResult).toBe("😭");
