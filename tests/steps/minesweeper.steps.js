@@ -15,7 +15,7 @@ async function tagQuestionCell(cell) {
 }
 
 async function untagCell(cell) {
-	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
+	await page.click(`[data-testid="${cell}"]`, { button: 'right', clickCount: 1});
 }
 
 async function checkCell(cellValue) {
