@@ -10,6 +10,10 @@ async function tagCell(cell) {
 	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
 }
 
+async function untagCell(cell) {
+	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
+}
+
 async function checkCell(cellValue) {
 	const splittedCell = cellValue.split('-');
 	let splittedCellList = [];
@@ -54,6 +58,11 @@ Given('the user tags the cell {string}', async (string) => {
 });
 Given('the user resets the game', async () => {
 	await page.click(`[data-testid="resetButton"]`, { force: true });
+});
+When('the user removes tags cell {string}', async (string) => {
+	await tagCell(string);
+	await untagCell(string);
+
 });
 Then('the number of rows in the board should be: {string}', async (string) => {
 	const rows = await page.locator('data-testid=row')
