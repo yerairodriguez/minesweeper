@@ -10,11 +10,41 @@ async function tagCell(cell) {
 	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
 }
 
+async function checkCell(cellValue) {
+	const splittedCell = cellValue.split('-');
+	let splittedCellList = [];
+	for (let i = 0; i < splittedCell.length; i++) {
+		switch (splittedCell[i]) {
+			case 'O': splittedCellList.push(''); break;
+			case 'X': splittedCellList.push('💣'); break;
+			case ',': splittedCellList.push(''); break;
+			case '!': splittedCellList.push('🚩'); break;
+			case '?': splittedCellList.push('❓'); break;
+			case '1': splittedCellList.push('1'); break;
+			case '2': splittedCellList.push('2'); break;
+			case '3': splittedCellList.push('3'); break;
+			case '4': splittedCellList.push('4'); break;
+			case '5': splittedCellList.push('5'); break;
+			case '6': splittedCellList.push('6'); break;
+			case '7': splittedCellList.push('7'); break;
+			case '8': splittedCellList.push('8'); break;
+		}
+	}
+	for (let i = 0; i < splittedCellList.length; i++) {
+		const cell = await page.$(`[data-testid="${i}"]`);
+		const cellText = await cell.innerText();
+		expect(cellText).toEqual(splittedCellList[i]);
+	}
+}
+
 Given('the user opens the app', async () => {
 	await page.goto(url);
 });
 Given('the user loads the following data: {string}', async (param) => {
 	await page.goto(url + "?mockdata=" + param)
+});
+Given('the user loads the following data:', async (param) => {
+	await page.goto(url + "?mockdata=" + param.replaceAll("\n", "-"));
 });
 Given('the user reveals cell {string}', async (string) => {
 	await revealCell(string);
@@ -55,7 +85,34 @@ Then('cell {string} should be revealed with mine', async (string) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe("💣");
 });
+Then('cell {string} should not be revealed with mine', async (string) =>{
+	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
+	expect(cell).not.toBe("💣");
+});
 Then('cell {string} should be unrevealed', async (string) =>{
 	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
 	expect(cell).toBe("");
 });
+Then('the cell {string} should show the following value: {string}', async (string, string2) =>{
+	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
+	expect(cell).toBe(string2);
+});
+Then('the cell {string} should be empty', async (string) =>{
+	const cell = await page.locator(`[data-testid="${string}"]`).innerText();
+	expect(cell).toBe("");
+});
+Then('the mockData should have the following data:', async (cellValue) =>{
+	await checkCell(cellValue.replaceAll("\n", "-"));
+});
+Then('game should be over', async () =>{
+	const gameResult = await page.locator('data-testid=gameResult').innerText();
+	expect(gameResult).toBe("😭");
+})
+Then('game should be won', async () =>{
+	const gameResult = await page.locator('data-testid=gameResult').innerText();
+	expect(gameResult).toBe("😎");
+})
+Then('game should not be over', async () =>{
+	const gameResult = await page.locator('data-testid=gameResult').innerText();
+	expect(gameResult).toBe("😐");
+})
