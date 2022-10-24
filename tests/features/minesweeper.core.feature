@@ -48,7 +48,6 @@ When the user reveals cell "[1-0]"
 Then cell "[1-0]" should not be revealed with mine
 And game should not be over
 
-@current
 Scenario Outline: User reveals a cell with no bomb -> shows number of adjacent mines 
 Given the user loads the following data: "<mockData>"
 When the user reveals cell "[1-1]"
@@ -65,6 +64,7 @@ Examples:
     | XXX-XOX-XXO |       7       |
     | XXX-XOX-XXX |       8       |
 
+@current
 Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
 Given the user loads the following data:
 """
@@ -73,8 +73,8 @@ OOO
 OOO  
 OOX  
 """
-When the user reveals the cell "[1-1]"
-Then the cell "[1-1]" is empty
+When the user reveals cell "[1-1]"
+Then the cell "[1-1]" should be empty
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
