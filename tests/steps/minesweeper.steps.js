@@ -62,7 +62,6 @@ Given('the user resets the game', async () => {
 When('the user removes tags cell {string}', async (string) => {
 	await tagCell(string);
 	await untagCell(string);
-
 });
 Then('the number of rows in the board should be: {string}', async (string) => {
 	const rows = await page.locator('data-testid=row')
