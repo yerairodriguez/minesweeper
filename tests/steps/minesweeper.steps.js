@@ -104,7 +104,6 @@ Then('cell {string} should be empty', async (string) =>{
 Then('the mockData should have the following data:', async (cellValue) =>{
 	await checkCell(cellValue.replaceAll("\n", "-"));
 });
-
 Then('game should be over', async () =>{
 	const gameResult = await page.locator('data-testid=gameResult').innerText();
 	expect(gameResult).toBe("😭");
