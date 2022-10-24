@@ -10,6 +10,10 @@ async function tagCell(cell) {
 	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
 }
 
+async function tagQuestionCell(cell) {
+	await page.click(`[data-testid="${cell}"]`, { button: 'right', clickCount: 1});
+}
+
 async function untagCell(cell) {
 	await page.click(`[data-testid="${cell}"]`, { button: 'right'});
 }
@@ -55,6 +59,10 @@ Given('the user reveals cell {string}', async (string) => {
 });
 Given('the user tags the cell {string}', async (string) => {
 	await tagCell(string);
+});
+Given('the user tags as questionable on {string}', async (string) => {
+	await tagCell(string);
+	await tagQuestionCell(string);
 });
 Given('the user resets the game', async () => {
 	await page.click(`[data-testid="resetButton"]`, { force: true });
