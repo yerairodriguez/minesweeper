@@ -81,7 +81,7 @@ function removeEventListener() {
     board.removeEventListener("contextmenu", stopProp, { capture: true });
 }
 
-function stopEventListener(params) {
+function stopEventListener() {
     board.addEventListener("click", stopProp, { capture: true });
     board.addEventListener("contextmenu", stopProp, { capture: true });
 }
@@ -147,8 +147,7 @@ function unrevealCellContent(cellID) {
         if (arrayCellInfo[splittedID[0]][splittedID[1]].isMined) {
             revealMine(cell);
             revealMinesWhenGameOver(cell);
-            board.addEventListener("click", stopProp, { capture: true });
-            board.addEventListener("contextmenu", stopProp, { capture: true });
+            stopEventListener();
             stopTimer();
             gameOver = true;
         } else if (!gameOver) {
@@ -343,8 +342,7 @@ function checkWin() {
     }
     if (count == (rows * columns) - minesCount) {
         stopTimer();
-        board.addEventListener("click", stopProp, { capture: true });
-        board.addEventListener("contextmenu", stopProp, { capture: true });
+        removeEventListener();
         return true;
     }
     return false;
