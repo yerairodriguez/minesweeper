@@ -51,7 +51,7 @@ And game should not be over
 Scenario Outline: User reveals a cell with no bomb -> shows number of adjacent mines 
 Given the user loads the following data: "<mockData>"
 When the user reveals cell "[1-1]"
-Then the cell "[1-1]" should show the following value: "<adjacentMines>"
+Then cell "[1-1]" should show the following value: "<adjacentMines>"
 
 Examples:
     |   mockData  | adjacentMines |
@@ -73,9 +73,8 @@ OOO
 OOX  
 """
 When the user reveals cell "[1-1]"
-Then the cell "[1-1]" should be empty
+Then cell "[1-1]" should be empty
 
-@current
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
 """
@@ -84,13 +83,13 @@ OOO
 OOO  
 XXX  
 """
-When the user reveals cell "[1-1]"
+When the user reveals cell "[2-2]"
 Then the mockData should have the following data:
 """
 OOO  
 OOO  
 232  
-...  
+XXX  
 """
 
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
@@ -105,12 +104,12 @@ Then the mockData should have the following data:
 """
 OOOOO  
 O111O  
-O1.1O  
+O1X1O  
 """
 #Tagging & untagging behaviour (mined cell, questionable cell, etc)
-
+@current
 Scenario: Tagging cell as mined, a mined symbol will appear
-When the user tags cell "[0-0]"
+Given the user tags the cell "[0-0]"
 Then cell "[0-0]" should show the following value: "🚩"
 
 Scenario: Tagging cell as mined, the left mines counter should decrease by one
@@ -124,12 +123,12 @@ When the user removes tags cell "[0-0]"
 Then cell "[0-0]" should show the following value: ""
 
 Scenario: Untagging cell as mined, the mines left counter should increase by one
-And untaggedMinesLeft value is: "9"
+Given untaggedMinesLeft value is: "9"
 When the user removes tags cell "[0-0]"
-And untaggedMinesLeft value should be: "10"
+Then untaggedMinesLeft value should be: "10"
 
 Scenario: Tagging a questionable mine cell, the questionable symbol will appear
-When the user tags as "questionable" on "[1-1]"
+Given the user tags as "questionable" on "[1-1]"
 Then cell "[1-1]" should show the following value: "?"
 
 Scenario: Tagging a questionable mine cell, the mines left counter should not decrease nor increase
@@ -138,7 +137,7 @@ When the user tags as "questionable" on "[1-1]"
 And untaggedMinesLeft display should be: "10"
 
 Scenario: Untagging a questionable mine cell, the questionable symbol will disappear
-When the user removes tag on "[1-1]"
+Given the user removes tag on "[1-1]"
 Then cell "[1-1]" should show the following value: ""
 
 Scenario: Untagging a questionable mine cell, the mines left counter should not decrease nor increase
