@@ -64,7 +64,6 @@ Examples:
     | XXX-XOX-XXO |       7       |
     | XXX-XOX-XXX |       8       |
 
-@current
 Scenario: User reveals a cell without mine nor adjacent mines, the cell is empty
 Given the user loads the following data:
 """
@@ -76,6 +75,7 @@ OOX
 When the user reveals cell "[1-1]"
 Then the cell "[1-1]" should be empty
 
+@current
 Scenario: An empty cell revealed by a neighbour, should reveal adjacent cells
 Given the user loads the following data: 
 """
