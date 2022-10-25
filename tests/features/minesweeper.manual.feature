@@ -32,12 +32,6 @@ When the user reveals cell [1-1]
 Then time counter should start
 
 @manual
-Scenario Outline: Time counter max number reached
-Given the user loads the following timeCounter data: "999"  
-When the user tags cell [1-1] 
-Then the following value del contador should show: "∞"
-
-@manual
 Scenario: Starting game with tag as first move
 Given the game has not started
 And user tags cell [2-2]

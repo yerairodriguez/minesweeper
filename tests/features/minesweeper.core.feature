@@ -136,10 +136,10 @@ Scenario: Tagging a questionable mine cell, the mines left counter should not de
 Given the left mines counter should be: "10"
 When the user tags as questionable on "[1-1]"
 And the left mines counter should be: "10"
-@current
+
 Scenario: Untagging a questionable mine cell, the questionable symbol will disappear
 Given the user tags as questionable on "[1-1]"
-When the user removes tags cell "[1-1]"
+When the user removes questionable tag on "[1-1]"
 Then cell "[1-1]" should show the following value: ""
 
 Scenario: Untagging a questionable mine cell, the mines left counter should not decrease nor increase
