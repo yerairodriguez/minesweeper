@@ -12,11 +12,11 @@ let rows = 8;
 let columns = 8;
 let minesCount = 10;
 let gameOver = false;
+let totalSeconds = 0;
+let interval = null;
 let timer = document.getElementById("timer");
 let result = document.getElementById("gameResult");
 let board = document.getElementById("board");
-let totalSeconds = 0;
-let interval = null;
 
 window.onload = function () {
     startGame();
@@ -32,7 +32,7 @@ function startGame() {
     infoArray();
     setMines(mockdata);
     displaySuspectedMinesLeft();
-    adjacentMines();
+    setAdjacentMines();
     createBoard(rows, columns);
 }
 
@@ -81,7 +81,7 @@ function removeEventListener() {
     board.removeEventListener("contextmenu", stopProp, { capture: true });
 }
 
-function stopEventListener() {
+function stopClickWhenGameEnded() {
     board.addEventListener("click", stopProp, { capture: true });
     board.addEventListener("contextmenu", stopProp, { capture: true });
 }
@@ -139,7 +139,6 @@ function setMines(mockdata) {
 }
 
 function unrevealCellContent(cellID) {
-    let board = document.getElementById("board");
     let cell = document.getElementById(cellID);
     let splittedID = cellID.split("-")
     if (!arrayCellInfo[splittedID[0]][splittedID[1]].isRevealed && !arrayCellInfo[splittedID[0]][splittedID[1]].isTagged) {
@@ -147,7 +146,7 @@ function unrevealCellContent(cellID) {
         if (arrayCellInfo[splittedID[0]][splittedID[1]].isMined) {
             revealMine(cell);
             revealMinesWhenGameOver(cell);
-            stopEventListener();
+            stopClickWhenGameEnded();
             stopTimer();
             gameOver = true;
         } else if (!gameOver) {
@@ -167,7 +166,7 @@ function getNumOfAdjacentMines(cell, splittedID) {
 
 }
 
-function adjacentMines() {
+function setAdjacentMines() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             if (!arrayCellInfo[r][c].isMined) {
@@ -228,7 +227,7 @@ function revealMine(cell) {
 function revealMinesWhenGameOver() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
-            if (arrayCellInfo[r][c].isMined) {
+            if (arrayCellInfo[r][c].isMined && !arrayCellInfo[r][c].isTagged) {
                 let cell = r + "-" + c
                 cell = document.getElementById(cell);
                 revealMine(cell);
@@ -330,8 +329,10 @@ function displayTagCell(cellID, splittedID) {
     displaySuspectedMinesLeft()
 }
 
+/* */
+
+
 function checkWin() {
-    let board = document.getElementById("board");
     let count = 0;
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
@@ -342,12 +343,11 @@ function checkWin() {
     }
     if (count == (rows * columns) - minesCount) {
         stopTimer();
-        removeEventListener();
+        stopClickWhenGameEnded();
         return true;
     }
     return false;
 }
-
 
 /* Timer functions */
 
@@ -387,7 +387,6 @@ function resetTimer() {
 /* Board updates functions */
 
 function deleteBoard() {
-    let board = document.getElementById("board");
     board.innerHTML = ""
 }
 
