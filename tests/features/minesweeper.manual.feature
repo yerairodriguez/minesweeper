@@ -28,33 +28,33 @@ Given the user opens the app
 @manual
 Scenario Outline: User reveals cell, time counter display will start
 Then the time display should is empty
-When the user reveals cell [1-1]
+When the user reveals cell "[1-1]"
 Then time counter should start
 
 @manual
 Scenario: Starting game with tag as first move
 Given the game has not started
-And user tags cell [2-2]
-Then cell [2-2] should show the following value: "!"
+And user tags cell "[2-2]"
+Then cell "[2-2]" should show the following value: "!"
 And timeCounter display should start
 
 @manual
 Scenario: Starting game with questionable tag as first move
 Given the game has not started
-And user tags cell [2-2]
-Then cell [2-2] should show the following value: "?"
+And user tags cell "[2-2]"
+Then cell "[2-2]" should show the following value: "❓"
 And timeCounter display should start
 
 @manual
 Scenario: User game over, time counter should be stopped
 Given the user loads the following data: "OX"
-When user reveals cell [1-2]
+When user reveals cell "[1-2]"
 Then time counter should be stopped
 
 @manual
 Scenario: User wins the game, time counter should be stopped
 Given the user loads the following data: "OX"
-When user reveals cell [1-1]
+When user reveals cell "[1-1]"
 Then time counter should be stopped
 
 @manual
