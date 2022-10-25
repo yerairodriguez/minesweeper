@@ -11,7 +11,7 @@ async function tagCell(cell) {
 }
 
 async function tagQuestionCell(cell) {
-	await page.click(`[data-testid="${cell}"]`, { button: 'right', clickCount: 1});
+	await page.click(`[data-testid="${cell}"]`, { button: 'right', clickCount: 2});
 }
 
 async function untagCell(cell) {
@@ -61,7 +61,6 @@ Given('the user tags the cell {string}', async (string) => {
 	await tagCell(string);
 });
 Given('the user tags as questionable on {string}', async (string) => {
-	await tagCell(string);
 	await tagQuestionCell(string);
 });
 Given('the user resets the game', async () => {
@@ -69,6 +68,9 @@ Given('the user resets the game', async () => {
 });
 When('the user removes tags cell {string}', async (string) => {
 	await tagCell(string);
+	await untagCell(string);
+});
+When('the user removes questionable tag on {string}', async (string) => {
 	await untagCell(string);
 });
 Then('the number of rows in the board should be: {string}', async (string) => {
