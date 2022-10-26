@@ -1,6 +1,8 @@
 import { createBoard } from "./boardContent.js";
 
 const defaultCell = {
+    x: 0,
+    y: 0,
     isMined: false,
     isRevealed: false,
     isTagged: "",
@@ -29,19 +31,23 @@ function startGame() {
         rows = mockdata.length;
         columns = mockdata[0].length;
     }
-    infoArray();
+    createInfoArray();
     setMines(mockdata);
     displaySuspectedMinesLeft();
-    setAdjacentMines();
+    setNumOfAdjacentMines();
     createBoard(rows, columns);
 }
 
-function infoArray() {
+function createInfoArray() {
     arrayCellInfo = [];
     for (let i = 0; i < rows; i++) {
         arrayCellInfo.push([])
         for (let j = 0; j < columns; j++) {
-            arrayCellInfo[i].push({ ...defaultCell, })
+            arrayCellInfo[i].push({
+                ...defaultCell,
+                x: i,
+                y: j
+            })
         }
     }
     console.log(arrayCellInfo)
@@ -55,18 +61,17 @@ function addClickEvents() {
     if (!gameOver) {
         for (let i = 0; i < cells.length; i++) {
             cells[i].addEventListener("click", function () {
-                startTimer();
-                unrevealCellContent(this.getAttribute("id"));
-                displayGameResult();
+                let splittedID = this.getAttribute("id").split("-")
+                let cellData = arrayCellInfo[splittedID[0]][splittedID[1]]
+                unrevealCellContent(cellData);
             });
             cells[i].addEventListener("contextmenu", function (event) {
+                let splittedID = this.getAttribute("id").split("-")
+                let cellData = arrayCellInfo[splittedID[0]][splittedID[1]]
                 event.preventDefault();
-                startTimer();
-                let id = this.getAttribute("id")
-                let splittedID = id.split("-");
-                if (!arrayCellInfo[splittedID[0]][splittedID[1]].isRevealed) {
-                    tagCell(splittedID)
-                    displayTagCell(id, splittedID)
+                if (!cellData.isRevealed) {
+                    tagCell(cellData)
+                    displayTagCell(cellData)
                 }
             });
         }
@@ -76,7 +81,7 @@ function addClickEvents() {
     });
 }
 
-function removeEventListener() {
+function removeClickProhibition() {
     board.removeEventListener("click", stopProp, { capture: true });
     board.removeEventListener("contextmenu", stopProp, { capture: true });
 }
@@ -138,35 +143,35 @@ function setMines(mockdata) {
     }
 }
 
-function unrevealCellContent(cellID) {
-    let cell = document.getElementById(cellID);
-    let splittedID = cellID.split("-")
-    if (!arrayCellInfo[splittedID[0]][splittedID[1]].isRevealed && !arrayCellInfo[splittedID[0]][splittedID[1]].isTagged) {
-        arrayCellInfo[splittedID[0]][splittedID[1]].isRevealed = true
-        if (arrayCellInfo[splittedID[0]][splittedID[1]].isMined) {
+function unrevealCellContent(cellData) {
+    startTimer();
+    let cell = document.getElementById(cellData.x + "-" + cellData.y);
+    if (!cellData.isRevealed && !cellData.isTagged) {
+        cellData.isRevealed = true
+        if (cellData.isMined) {
             revealMine(cell);
             revealMinesWhenGameOver(cell);
             stopClickWhenGameEnded();
             stopTimer();
             gameOver = true;
         } else if (!gameOver) {
-            getNumOfAdjacentMines(cell, splittedID);
+            showNumOfAdjacentMines(cell, cellData);
         }
     }
+    displayGameResult();
 }
 
-function getNumOfAdjacentMines(cell, splittedID) {
+function showNumOfAdjacentMines(cell, cellData) {
     cell.classList.add("revealed");
-    if (arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines != 0) {
-        cell.innerText = arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines
-        cell.classList.add("x" + arrayCellInfo[splittedID[0]][splittedID[1]].numOfAdjacentMines)
+    if (cellData.numOfAdjacentMines != 0) {
+        cell.innerText = cellData.numOfAdjacentMines
+        cell.classList.add("x" + cellData.numOfAdjacentMines)
     } else {
-        revealEmptyCell(splittedID);
+        revealEmptyCell(cellData.x, cellData.y);
     }
-
 }
 
-function setAdjacentMines() {
+function setNumOfAdjacentMines() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             if (!arrayCellInfo[r][c].isMined) {
@@ -236,94 +241,45 @@ function revealMinesWhenGameOver() {
     }
 }
 
-function revealEmptyCell(splittedID) {
-    let r = parseInt(splittedID[0])
-    let c = parseInt(splittedID[1])
-    let cell;
-    if (r + 1 < arrayCellInfo.length && !arrayCellInfo[r + 1][c].isRevealed) {
-        arrayCellInfo[r + 1][c].isRevealed = true
-        splittedID = (r + 1) + "-" + c
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (r - 1 >= 0 && !arrayCellInfo[r - 1][c].isRevealed) {
-        arrayCellInfo[r - 1][c].isRevealed = true
-        splittedID = (r - 1) + "-" + c
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (c - 1 >= 0 && !arrayCellInfo[r][c - 1].isRevealed) {
-        arrayCellInfo[r][c - 1].isRevealed = true
-        splittedID = r + "-" + (c - 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (c + 1 < arrayCellInfo.length && !arrayCellInfo[r][c + 1].isRevealed) {
-        arrayCellInfo[r][c + 1].isRevealed = true
-        splittedID = r + "-" + (c + 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (r - 1 >= 0 && c - 1 >= 0 && !arrayCellInfo[r - 1][c - 1].isRevealed) {
-        arrayCellInfo[r - 1][c - 1].isRevealed = true
-        splittedID = (r - 1) + "-" + (c - 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (r + 1 < arrayCellInfo.length && c + 1 < arrayCellInfo.length && !arrayCellInfo[r + 1][c + 1].isRevealed) {
-        arrayCellInfo[r + 1][c + 1].isRevealed = true
-        splittedID = (r + 1) + "-" + (c + 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (r - 1 >= 0 && c + 1 < arrayCellInfo.length && !arrayCellInfo[r - 1][c + 1].isRevealed) {
-        arrayCellInfo[r - 1][c + 1].isRevealed = true
-        splittedID = (r - 1) + "-" + (c + 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
-    }
-    if (r + 1 < arrayCellInfo.length && c - 1 >= 0 && !arrayCellInfo[r + 1][c - 1].isRevealed) {
-        arrayCellInfo[r + 1][c - 1].isRevealed = true
-        splittedID = (r + 1) + "-" + (c - 1)
-        cell = document.getElementById(splittedID)
-        splittedID = splittedID.split("-")
-        getNumOfAdjacentMines(cell, splittedID)
+function revealEmptyCell(x, y) {
+    for (let i = x - 1; i <= x + 1; i++) {
+        for (let j = y - 1; j <= y + 1; j++) {
+            if (i >= 0 && i < rows && j >= 0 && j < columns) {
+                if (!arrayCellInfo[i][j].isRevealed) {
+                    unrevealCellContent(arrayCellInfo[i][j]);
+                }
+            }
+        }
     }
 }
 
 /* Tagging functions */
 
-function tagCell(splittedID) {
-    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag") {
-        arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = "questionMark";
-    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "") {
-        arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = "flag";
-    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged && !arrayCellInfo[splittedID[0]][splittedID[1]].isMined== "incorrect") {
-        arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = "";
+function tagCell(cellData) {
+    if (cellData.isTagged == "flag") {
+        cellData.isTagged = "questionMark";
+    } else if (cellData.isTagged == "") {
+        cellData.isTagged = "flag";
+    } else if (cellData.isTagged && !cellData.isMined == "incorrect") {
+        cellData.isTagged = "";
     }
     else {
-        arrayCellInfo[splittedID[0]][splittedID[1]].isTagged = ""
+        cellData.isTagged = ""
     }
 }
 
-function displayTagCell(cellID, splittedID) {
-    let cellTag = document.getElementById(cellID);
-    if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "flag") {
-        cellTag.innerText = "🚩"
+function displayTagCell(cellData) {
+    startTimer();
+    let cell = document.getElementById(cellData.x + "-" + cellData.y);
+    if (cellData.isTagged == "flag") {
+        cell.innerText = "🚩"
         minesCount--;
-    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "") {
-        cellTag.innerText = ""
-    } else if (arrayCellInfo[splittedID[0]][splittedID[1]].isTagged == "incorrect") {
-        cellTag.innerText = "❌"
+    } else if (cellData.isTagged == "") {
+        cell.innerText = ""
+    } else if (cellData.isTagged == "incorrect") {
+        cell.innerText = "❌"
     } else {
-        cellTag.innerText = "❓"
+        cell.innerText = "❓"
         minesCount++;
     }
     displaySuspectedMinesLeft()
@@ -398,5 +354,5 @@ function resetBoard() {
     startGame();
     addClickEvents();
     resetTimer();
-    removeEventListener();
+    removeClickProhibition();
 }  
